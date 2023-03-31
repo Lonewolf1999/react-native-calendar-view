@@ -13,6 +13,9 @@ const calcWorklet = (value: number): number => {
     'worklet'
     return (value * Utils.SCREEN_WIDTH) / 100
 }
+const countWeekDays = (date: Date) => {
+    return [...Array(7).keys()].map((a) => addDays(date, a))
+}
 
 const WeeklyCalendar = ({
     selectedDate = startOfWeek(new Date(), { weekStartsOn: 1 }),
@@ -20,7 +23,7 @@ const WeeklyCalendar = ({
     onCalendarDayPress,
 }: MainScreenProps) => {
 
-    const [week, setWeek] = useState<Date[]>(Utils.countWeekDays(new Date()))
+    const [week, setWeek] = useState<Date[]>(countWeekDays(startOfWeek(new Date(), { weekStartsOn: 1 })))
 
     const rStyle = useAnimatedStyle(() => {
         return {
@@ -34,9 +37,9 @@ const WeeklyCalendar = ({
     }, [selectedDate])
 
     const onChangeWeek = (isNext: boolean) => {
-        const data = Utils.countWeekDays(addDays(week.at(isNext ? -1 : 0) || 0, isNext ? 7 : -7))
+        const data = countWeekDays(addDays(week.at(isNext ? -1 : 0) || 0, isNext ? 7 : -7))
         setWeek(() => [...data])
-        onCalendarDayPress({ date: data[0], event: 'weekChange' })
+        onCalendarDayPress(data[0])
         selectedAnim.value = withTiming(0)
     }
 
@@ -53,7 +56,7 @@ const WeeklyCalendar = ({
                     ]}
                     onPress={() => {
                         selectedAnim.value = withTiming(index)
-                        onCalendarDayPress({ date: item, event: 'dateChange' })
+                        onCalendarDayPress(item)
                     }}
                     title={item.getDate()}
                 />
@@ -92,5 +95,5 @@ const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 interface MainScreenProps {
     selectedDate: Date,
     selectedAnim: SharedValue<number>,
-    onCalendarDayPress: ({ date, event }: { date: Date, event: 'weekChange' | 'dateChange' }) => void,
+    onCalendarDayPress: (value: Date) => void,
 }
