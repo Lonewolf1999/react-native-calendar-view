@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         paddingHorizontal: Utils.calcWidth(5),
-        marginTop: Utils.calcWidth(2),
         marginBottom: Utils.calcWidth(2),
     },
     header: {
