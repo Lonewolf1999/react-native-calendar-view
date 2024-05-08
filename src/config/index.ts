@@ -19,5 +19,6 @@ export default {
     },
     Images: {
         IC_ARROW: require('../assets/images/ic-arrow.png'),
+        IC_PLUS: require('../assets/images/ic-plus.png'),
     },
 }
