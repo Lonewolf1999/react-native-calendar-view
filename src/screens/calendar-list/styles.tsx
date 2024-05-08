@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 
 import Config from '../../config'
 import Utils from '../../utils'
@@ -58,7 +58,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: Utils.calcWidth(5),
         backgroundColor: Config.Theme.COLOR_WHITE,
         paddingBottom: Utils.calcWidth(5),
-        paddingTop: Utils.statusBarHeight,
+        paddingTop: Platform.select({
+            ios: 0,
+            android: Utils.statusBarHeight,
+        }),
     },
     plusIcon: {
         tintColor: Config.Theme.COLOR_WHITE,
