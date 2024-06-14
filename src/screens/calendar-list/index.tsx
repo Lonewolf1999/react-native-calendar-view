@@ -5,13 +5,9 @@ import { format, isEqual, parse } from 'date-fns';
 import { useSharedValue } from 'react-native-reanimated';
 
 import WeeklyCalendar from '../../component/weekly-calendar';
-import CustomButton from '../../component/custom-button';
-
-import Config from '../../config'
 
 import staticData from './static-data';
 import styles from './styles'
-import { useModalRefs } from '../../context/modals';
 
 let onViewableItemsChangedFlag: 'dayPressed' | 'scrollStart' | 'scrollEnd' = 'scrollEnd'
 
@@ -19,8 +15,6 @@ const CalendarListScreen = () => {
 
   const listRef = useRef<VirtualizedList<string>>(null)
   const timeoutIdRef = useRef<number | null>(null)
-
-  const { addToModalRef } = useModalRefs()
 
   const selectedAnim = useSharedValue(0);
 
@@ -131,11 +125,6 @@ const CalendarListScreen = () => {
         }} />
       <View style={styles.belt} />
       <View style={[styles.belt, styles.secondBelt]} />
-      <CustomButton
-        onPress={() => addToModalRef?.current?.show({ callback: (a) => console.log(a), desc: '', title: '' })}
-        style={[styles.shadow, styles.floatingBtn]}
-        imageStyle={styles.plusIcon}
-        source={Config.Images.IC_PLUS} />
     </View>
   )
 }

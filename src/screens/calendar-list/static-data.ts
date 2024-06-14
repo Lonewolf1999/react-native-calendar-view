@@ -1,3 +1,6 @@
+// Static data to represent the feature change date to the current week dates to see the result
+// To make this work properly for the changingweeks need to integrate api
+
 export default {
     '13 March 2023': [
         {
