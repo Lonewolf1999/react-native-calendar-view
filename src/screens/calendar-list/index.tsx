@@ -24,7 +24,7 @@ const CalendarListScreen = () => {
 
   useEffect(() => {
     getListData()
-  }, [])
+  }, [selectedDate])
 
   const getListData = () => {
     setApiCall(true)
@@ -98,7 +98,8 @@ const CalendarListScreen = () => {
         <WeeklyCalendar
           selectedAnim={selectedAnim}
           onCalendarDayPress={onCalendarDayPress}
-          selectedDate={selectedDate} />
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate} />
       </View>
       <VirtualizedList
         style={styles.list}

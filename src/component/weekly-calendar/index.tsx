@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Reanimated, { SharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { startOfWeek, addDays, isEqual, format } from 'date-fns';
 
@@ -21,9 +22,11 @@ const WeeklyCalendar = ({
     selectedDate = startOfWeek(new Date(), { weekStartsOn: 1 }),
     selectedAnim,
     onCalendarDayPress,
+    setSelectedDate,
 }: MainScreenProps) => {
 
     const [week, setWeek] = useState<Date[]>(countWeekDays(startOfWeek(new Date(), { weekStartsOn: 1 })))
+    const [show, setShow] = useState(false);
 
     const rStyle = useAnimatedStyle(() => {
         return {
@@ -72,7 +75,19 @@ const WeeklyCalendar = ({
                         imageStyle={[styles.arrow, styles.rotate]}
                         source={Config.Images.IC_ARROW}
                         onPress={() => onChangeWeek(false)} />
-                    <Text style={styles.header}>{format(week[0], 'MMMM yyyy')}</Text>
+                    <TouchableOpacity onPress={() => setShow(true)}>
+                        <RNDateTimePicker
+                            display='calendar'
+                            value={selectedDate}
+                            mode={'date'}
+                            onChange={(event, selectedDate) => {
+                                setShow(false);
+                                if (selectedDate)
+                                    setSelectedDate(selectedDate);
+                            }}
+                        />
+                        {/* <Text style={styles.header}>{format(week[0], 'MMMM yyyy')}</Text> */}
+                    </TouchableOpacity>
                     <CustomButton
                         style={styles.arrowBtn}
                         imageStyle={styles.arrow}
@@ -96,4 +111,5 @@ interface MainScreenProps {
     selectedDate: Date,
     selectedAnim: SharedValue<number>,
     onCalendarDayPress: (value: Date) => void,
+    setSelectedDate: (value: Date) => void,
 }
