@@ -1,12 +1,12 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { View, VirtualizedList, ViewToken, Text } from 'react-native'
 
-import { format, isEqual, parse } from 'date-fns';
+import { format, isEqual, isWithinInterval, parse } from 'date-fns';
 import { useSharedValue } from 'react-native-reanimated';
 
 import WeeklyCalendar from '../../component/weekly-calendar';
 
-import staticData from './static-data';
+import generateData from './static-data-generator';
 import styles from './styles'
 
 let onViewableItemsChangedFlag: 'dayPressed' | 'scrollStart' | 'scrollEnd' = 'scrollEnd'
@@ -15,28 +15,29 @@ const CalendarListScreen = () => {
 
   const listRef = useRef<VirtualizedList<string>>(null)
   const timeoutIdRef = useRef<number | null>(null)
+  const weeklyCalendarRef = useRef<{ week: Date[]; }>(null)
 
   const selectedAnim = useSharedValue(0);
 
   const [list, setList] = useState<ListData>({})
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [apiCall, setApiCall] = useState<boolean>(false)
 
   useEffect(() => {
     getListData()
   }, [selectedDate])
 
   const getListData = () => {
-    setApiCall(true)
-    // api call here
-    const response = staticData
-    const index = Object.keys(response).findIndex(a => isEqual(parse(a, 'dd MMMM yyyy', new Date()), selectedDate))
-    setList(response)
-
-    setTimeout(() => {
-      listRef.current?.scrollToIndex({ index: index === -1 ? 0 : index })
-    }, 600);
-    setApiCall(false)
+    let response = {}
+    if (weeklyCalendarRef.current?.week && isWithinInterval(selectedDate,
+      { start: weeklyCalendarRef.current?.week[0], end: weeklyCalendarRef.current?.week[6] })) {
+      response = generateData(selectedDate)
+      const index = Object.keys(response).findIndex(a => isEqual(parse(a, 'dd MMMM yyyy', new Date()), selectedDate))
+      setList(response)
+      setTimeout(() => {
+        if (weeklyCalendarRef.current?.week && weeklyCalendarRef.current?.week.length)
+          listRef.current?.scrollToIndex({ index: index === -1 ? 0 : index })
+      }, 600);
+    }
   }
 
   const onCalendarDayPress = async (date: Date) => {
@@ -74,7 +75,7 @@ const CalendarListScreen = () => {
           list[item].length ?
             list[item].map(renderLog) :
             <View style={styles.logContainer}>
-              <Text style={styles.noData}>{!apiCall ? 'No data found.' : ''}</Text>
+              <Text style={styles.noData}>No data found.</Text>
             </View>
         }
       </View>
@@ -96,6 +97,7 @@ const CalendarListScreen = () => {
     <View style={styles.container}>
       <View style={[styles.shadow, styles.calendarContainer]}>
         <WeeklyCalendar
+          ref={weeklyCalendarRef}
           selectedAnim={selectedAnim}
           onCalendarDayPress={onCalendarDayPress}
           selectedDate={selectedDate}
