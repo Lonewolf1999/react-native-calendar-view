@@ -7,9 +7,9 @@ The calendar allows users to select dates and view corresponding events for each
 
 # Screenshots
 
-![App Screenshot](https://github.com/falakjatin/react-native-calendar-view/blob/main/src/assets/images/screenshot_android.png)
-
-![App Screenshot](https://github.com/falakjatin/react-native-calendar-view/blob/main/src/assets/images/screenshot_ios.png)
+iOS             |  Android
+:-------------------------:|:-------------------------:
+<img src="https://github.com/falakjatin/react-native-calendar-view/blob/main/src/assets/images/screenshot_ios.png" width=60% height=60%>  |  <img src="https://github.com/falakjatin/react-native-calendar-view/blob/main/src/assets/images/screenshot_android.png" width=50% height=50%>
 
 # TODOs
 1) Create Monthly view
