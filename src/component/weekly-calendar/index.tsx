@@ -24,7 +24,7 @@ const CalendarView = ({
         {...(Platform.OS === 'ios' && { accentColor: Config.Theme.COLOR_F00A6A })}
         display='default'
         value={selectedDate}
-        mode={'datetime'}
+        mode={'date'}
         style={{ backgroundColor: Config.Theme.COLOR_WHITE }}
         onChange={(event, selectedDate) => {
             setShow(false);
